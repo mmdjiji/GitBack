@@ -1,4 +1,13 @@
 services:
+  gitback:
+    container_name: gitback
+    image: docker.cnb.cool/mmdjiji/gitback:latest
+    restart: unless-stopped
+    volumes:
+      - ./repos:/app/repos
+      - ./config.yaml:/app/config.yaml:ro
+    depends_on: []
+
   cgit:
     container_name: cgit
     image: docker.cnb.cool/mmdjiji/cgit:latest
@@ -10,6 +19,9 @@ services:
     environment:
       - CGIT_TITLE=GitBack
       - CGIT_DESC=Git-based code backup system
+      - CGIT_SECTION_FROM_STARTPATH=1
       # - CGIT_THEME=cgithub-auto
       # - BASIC_AUTH_USER=admin
       # - BASIC_AUTH_PASS=12345678
+    depends_on:
+      - gitback

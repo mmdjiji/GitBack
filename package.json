@@ -1,0 +1,18 @@
+{
+  "name": "gitback",
+  "version": "1.0.0",
+  "description": "Git-based code backup system with scheduled tasks",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "bree": "^9.2.9",
+    "js-yaml": "^4.1.1",
+    "p-limit": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "license": "MIT"
+}

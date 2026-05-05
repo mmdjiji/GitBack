@@ -1,6 +1,9 @@
 # config.yaml
 # The root slot name corresponds to the backup folder
 
+on:
+  cron: 0 0 * * *
+
 # The github section contains backup jobs for
 # GitHub and GitHub Enterprise
 github:
@@ -108,8 +111,8 @@ cnb:
     - my-excluded-org
     - my-excluded-user
     - my-namespace/excluded-repository-name
-url:
-  type: url
+repo:
+  type: repo
   include:
     - https://git.zx2c4.com/cgit/
     - https://git.zx2c4.com/wintun/
