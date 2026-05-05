@@ -23,6 +23,7 @@ services:
     environment:
       - CGIT_TITLE=GitBack
       - CGIT_DESC=Git-based code backup system
+      - ENABLE_GRAVATAR=true
       - CGIT_SECTION_FROM_STARTPATH=1
       # - CGIT_THEME=cgithub-auto
       # - BASIC_AUTH_USER=admin
