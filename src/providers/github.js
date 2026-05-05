@@ -78,7 +78,7 @@ function buildAuthUrl(cloneUrl, token) {
 
 function shouldFetchLfs(lfsConfig, fullName, owner) {
   if (!lfsConfig || lfsConfig.length === 0) return false;
-  if (lfsConfig.includes('all')) return true;
+  if (lfsConfig.includes('*')) return true;
   if (lfsConfig.includes(fullName)) return true;
   if (lfsConfig.includes(owner)) return true;
   return false;

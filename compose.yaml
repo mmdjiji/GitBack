@@ -1,6 +1,8 @@
 services:
   gitback:
     container_name: gitback
+    # For users outside mainland China, please use the ghcr.io mirror
+    # image: ghcr.io/mmdjiji/gitback:latest
     image: docker.cnb.cool/mmdjiji/gitback:latest
     restart: unless-stopped
     volumes:
@@ -10,6 +12,8 @@ services:
 
   cgit:
     container_name: cgit
+    # For users outside mainland China, please use the ghcr.io mirror
+    # image: ghcr.io/mmdjiji/cgit:latest
     image: docker.cnb.cool/mmdjiji/cgit:latest
     restart: unless-stopped
     ports:

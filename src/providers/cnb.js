@@ -103,7 +103,7 @@ async function listRepos(provider) {
 
 function shouldFetchLfs(lfsConfig, fullPath, owner) {
   if (!lfsConfig || lfsConfig.length === 0) return false;
-  if (lfsConfig.includes('all')) return true;
+  if (lfsConfig.includes('*')) return true;
   if (lfsConfig.includes(fullPath)) return true;
   if (lfsConfig.includes(owner)) return true;
   return false;

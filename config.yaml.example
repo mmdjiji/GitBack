@@ -1,5 +1,4 @@
 # config.yaml
-# The root slot name corresponds to the backup folder
 
 # Configure a cron expression to execute on a scheduled time
 on:
@@ -33,16 +32,16 @@ github:
   # url: https://github.mydomain.com
   # (optional) Set whether enable lfs support
   lfs:
-    # - all
-    - my-included-org
-    - my-included-user
-    - my-namespace/included-repository-name
+    - "*"
+    # - my-included-org
+    # - my-included-user
+    # - my-namespace/included-repository-name
   # (optional) Exclude this list of repos
   # or whole organizations/users
-  exclude:
-    - my-excluded-org
-    - my-excluded-user
-    - my-namespace/excluded-repository-name
+  # exclude:
+  #   - my-excluded-org
+  #   - my-excluded-user
+  #   - my-namespace/excluded-repository-name
 # The gitlab section contains backup jobs for
 # GitLab.com and GitLab on premise
 gitlab:
@@ -67,16 +66,16 @@ gitlab:
   # url: https://gitlab.mydomain.com
   # (optional) Set whether enable lfs support
   lfs:
-    # - all
-    - my-included-org
-    - my-included-user
-    - my-namespace/included-repository-name
+    - "*"
+    # - my-included-org
+    # - my-included-user
+    # - my-namespace/included-repository-name
   # (optional) Exclude this list of repos
   # or whole organizations/users
-  exclude:
-    - my-excluded-org
-    - my-excluded-user
-    - my-namespace/excluded-repository-name
+  # exclude:
+  #   - my-excluded-org
+  #   - my-excluded-user
+  #   - my-namespace/excluded-repository-name
 # The CNB section contains backup jobs for
 # CNB.cool
 cnb:
@@ -102,16 +101,16 @@ cnb:
   # url: https://cnb.mydomain.com
   # (optional) Set whether enable lfs support
   lfs:
-    # - all
-    - my-included-org
-    - my-included-user
-    - my-namespace/included-repository-name
+    - "*"
+    # - my-included-org
+    # - my-included-user
+    # - my-namespace/included-repository-name
   # (optional) Exclude this list of repos
   # or whole organizations/users
-  exclude:
-    - my-excluded-org
-    - my-excluded-user
-    - my-namespace/excluded-repository-name
+  # exclude:
+  #   - my-excluded-org
+  #   - my-excluded-user
+  #   - my-namespace/excluded-repository-name
 repo:
   type: repo
   include:

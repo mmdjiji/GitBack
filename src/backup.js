@@ -29,8 +29,11 @@ async function backup(providerName, owner, repo, url, fetchLfs, description) {
         cloneRepo(url, repoPath);
       }
 
+      // Update description: use upstream description if available, otherwise fallback to source URL
       if (description) {
         setDescription(repoPath, description);
+      } else {
+        setDescription(repoPath, `Source: ${sanitizeUrl(url)}`);
       }
 
       if (fetchLfs) {
@@ -112,16 +115,19 @@ function fetchLfsObjects(repoPath, url) {
   }
 }
 
-function sanitizeUrlForLog(url) {
+function sanitizeUrl(url) {
   try {
     const parsed = new URL(url);
-    if (parsed.password) {
-      parsed.password = '***';
-    }
+    parsed.username = '';
+    parsed.password = '';
     return parsed.toString();
   } catch {
     return url;
   }
+}
+
+function sanitizeUrlForLog(url) {
+  return sanitizeUrl(url);
 }
 
 module.exports = { backup, REPOS_DIR };
