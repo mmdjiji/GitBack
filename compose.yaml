@@ -1,0 +1,15 @@
+services:
+  cgit:
+    container_name: cgit
+    image: docker.cnb.cool/mmdjiji/cgit:latest
+    restart: unless-stopped
+    ports:
+      - 8787:80
+    volumes:
+      - ./repos:/srv/git/:ro
+    environment:
+      - CGIT_TITLE=GitBack
+      - CGIT_DESC=Git-based code backup system
+      # - CGIT_THEME=cgithub-auto
+      # - BASIC_AUTH_USER=admin
+      # - BASIC_AUTH_PASS=12345678
