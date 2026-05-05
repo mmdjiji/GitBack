@@ -1,6 +1,7 @@
 # config.yaml
 # The root slot name corresponds to the backup folder
 
+# Configure a cron expression to execute on a scheduled time
 on:
   cron: 0 0 * * *
 
