@@ -115,9 +115,9 @@ When the sliding window limit is reached, subsequent tasks are automatically que
 
 Rate limiting is built-in and requires no additional configuration.
 
-## cgit Web Interface
+## CGit Web Interface
 
-Configure cgit via environment variables in `compose.yaml`:
+Configure CGit via environment variables in `compose.yaml`:
 
 ```yaml
 environment:

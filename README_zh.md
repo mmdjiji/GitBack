@@ -115,9 +115,9 @@ docker compose up -d
 
 限流为内置行为，无需额外配置。
 
-## cgit Web 界面
+## CGit Web 界面
 
-通过 `compose.yaml` 中的环境变量配置 cgit：
+通过 `compose.yaml` 中的环境变量配置 CGit：
 
 ```yaml
 environment:
