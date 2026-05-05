@@ -1,5 +1,7 @@
 # GitBack
 
+> The primary repository is hosted at [cnb.cool/mmdjiji/GitBack](https://cnb.cool/mmdjiji/GitBack) — please submit all issues and pull requests there. The GitHub repository is a read-only mirror.
+
 **English** | [简体中文](./README_zh.md)
 
 A Git-based code backup system that supports scheduled automatic backups from GitHub, GitLab, CNB, and any Git repository, with a built-in CGit web interface for browsing.
