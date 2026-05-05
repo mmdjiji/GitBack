@@ -1,5 +1,7 @@
 # GitBack
 
+[English](./README.md) | **简体中文**
+
 基于 Git 的代码备份系统，支持定时自动备份 GitHub、GitLab、CNB 及任意 Git 仓库，并通过 CGit 提供 Web 浏览界面。
 
 ## 功能特性
