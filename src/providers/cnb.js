@@ -14,6 +14,7 @@ async function listRepos(provider) {
   const token = provider.accessToken;
   const headers = {
     'Authorization': `Bearer ${token}`,
+    'Accept': 'application/vnd.cnb.api+json',
   };
 
   const repos = new Map(); // path -> repo data
@@ -33,7 +34,7 @@ async function listRepos(provider) {
   // Starred repos
   if (provider.starred) {
     try {
-      const data = await fetchAllPages(`${apiBase}/user/starred`, { headers }, pageOpts);
+      const data = await fetchAllPages(`${apiBase}/user/stared-repos`, { headers }, pageOpts);
       for (const r of data) {
         if (r.path) {
           repos.set(r.path, r);
