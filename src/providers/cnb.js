@@ -23,7 +23,7 @@ async function listRepos(provider) {
 
   // Owned repos
   if (provider.owned) {
-    const data = await fetchAllPages(`${apiBase}/user/repos`, { headers }, pageOpts);
+    const data = await fetchAllPages(`${apiBase}/user/repos?role=Guest`, { headers }, pageOpts);
     for (const r of data) {
       if (r.path) {
         repos.set(r.path, r);
@@ -48,12 +48,12 @@ async function listRepos(provider) {
   // Member repos - fetch repos from each group
   if (provider.member) {
     try {
-      const groups = await fetchAllPages(`${apiBase}/user/groups`, { headers }, pageOpts);
+      const groups = await fetchAllPages(`${apiBase}/user/groups?role=Guest`, { headers }, pageOpts);
       for (const group of groups) {
         if (!group.path) continue;
         try {
           const groupRepos = await fetchAllPages(
-            `${apiBase}/groups/${group.path}/repos`,
+            `${apiBase}/${group.path}/-/repos`,
             { headers },
             pageOpts
           );
