@@ -1,4 +1,5 @@
 const { fetchAllPages } = require('../http');
+const { isExcluded, matchesLfs } = require('./match');
 
 const DEFAULT_API = 'https://api.github.com';
 
@@ -48,20 +49,20 @@ async function listRepos(provider) {
   }
 
   // Filter excludes
-  const excludeSet = new Set(provider.exclude);
+  const excludePatterns = provider.exclude;
 
   const results = [];
   for (const [fullName, repoData] of repos) {
     const [owner, repo] = fullName.split('/');
 
-    // Check exclude: match full_name, owner, or repo
-    if (excludeSet.has(fullName) || excludeSet.has(owner)) continue;
+    // Check exclude: match full_name or owner (path prefix)
+    if (isExcluded(fullName, excludePatterns)) continue;
 
     // Build authenticated URL
     const url = buildAuthUrl(repoData.clone_url, token);
 
     // Check LFS eligibility
-    const lfs = shouldFetchLfs(provider.lfs, fullName, owner);
+    const lfs = shouldFetchLfs(provider.lfs, fullName);
 
     results.push({ url, owner, repo, lfs, description: repoData.description || '' });
   }
@@ -76,12 +77,8 @@ function buildAuthUrl(cloneUrl, token) {
   return parsed.toString();
 }
 
-function shouldFetchLfs(lfsConfig, fullName, owner) {
-  if (!lfsConfig || lfsConfig.length === 0) return false;
-  if (lfsConfig.includes('*')) return true;
-  if (lfsConfig.includes(fullName)) return true;
-  if (lfsConfig.includes(owner)) return true;
-  return false;
+function shouldFetchLfs(lfsConfig, fullName) {
+  return matchesLfs(lfsConfig, fullName);
 }
 
 module.exports = { listRepos };

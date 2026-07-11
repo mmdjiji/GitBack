@@ -1,4 +1,5 @@
 const { fetchAllPages } = require('../http');
+const { isExcluded, matchesLfs } = require('./match');
 
 const DEFAULT_API = 'https://api.cnb.cool';
 const DEFAULT_CLONE_HOST = 'cnb.cool';
@@ -72,7 +73,7 @@ async function listRepos(provider) {
   }
 
   // Filter excludes
-  const excludeSet = new Set(provider.exclude);
+  const excludePatterns = provider.exclude;
 
   // Determine clone host from apiBase
   let cloneHost = DEFAULT_CLONE_HOST;
@@ -91,7 +92,7 @@ async function listRepos(provider) {
     const repo = parts.pop();
     const owner = parts.join('/');
 
-    if (excludeSet.has(fullPath) || excludeSet.has(owner)) continue;
+    if (isExcluded(fullPath, excludePatterns)) continue;
 
     const url = `https://cnb:${token}@${cloneHost}/${fullPath}.git`;
     const lfs = shouldFetchLfs(provider.lfs, fullPath, owner);
@@ -102,12 +103,8 @@ async function listRepos(provider) {
   return results;
 }
 
-function shouldFetchLfs(lfsConfig, fullPath, owner) {
-  if (!lfsConfig || lfsConfig.length === 0) return false;
-  if (lfsConfig.includes('*')) return true;
-  if (lfsConfig.includes(fullPath)) return true;
-  if (lfsConfig.includes(owner)) return true;
-  return false;
+function shouldFetchLfs(lfsConfig, fullPath) {
+  return matchesLfs(lfsConfig, fullPath);
 }
 
 module.exports = { listRepos };

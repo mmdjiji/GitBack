@@ -1,4 +1,5 @@
 const { fetchAllPages } = require('../http');
+const { isExcluded, matchesLfs } = require('./match');
 
 const DEFAULT_API = 'https://gitlab.com';
 
@@ -39,7 +40,7 @@ async function listRepos(provider) {
   }
 
   // Filter excludes
-  const excludeSet = new Set(provider.exclude);
+  const excludePatterns = provider.exclude;
 
   const results = [];
   for (const [fullPath, repoData] of repos) {
@@ -47,10 +48,10 @@ async function listRepos(provider) {
     const repo = parts.pop();
     const owner = parts.join('/');
 
-    if (excludeSet.has(fullPath) || excludeSet.has(owner)) continue;
+    if (isExcluded(fullPath, excludePatterns)) continue;
 
     const url = buildAuthUrl(repoData.http_url_to_repo, token);
-    const lfs = shouldFetchLfs(provider.lfs, fullPath, owner);
+    const lfs = shouldFetchLfs(provider.lfs, fullPath);
 
     results.push({ url, owner, repo, lfs, description: repoData.description || '' });
   }
@@ -65,12 +66,8 @@ function buildAuthUrl(httpUrl, token) {
   return parsed.toString();
 }
 
-function shouldFetchLfs(lfsConfig, fullPath, owner) {
-  if (!lfsConfig || lfsConfig.length === 0) return false;
-  if (lfsConfig.includes('*')) return true;
-  if (lfsConfig.includes(fullPath)) return true;
-  if (lfsConfig.includes(owner)) return true;
-  return false;
+function shouldFetchLfs(lfsConfig, fullPath) {
+  return matchesLfs(lfsConfig, fullPath);
 }
 
 module.exports = { listRepos };
