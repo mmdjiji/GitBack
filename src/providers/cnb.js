@@ -1,5 +1,5 @@
 const { fetchAllPages } = require('../http');
-const { isExcluded, matchesLfs } = require('./match');
+const { isExcluded, matchesLfs, matchesPattern } = require('./match');
 
 const DEFAULT_API = 'https://api.cnb.cool';
 const DEFAULT_CLONE_HOST = 'cnb.cool';
@@ -22,9 +22,12 @@ async function listRepos(provider) {
 
   const pageOpts = { pageParam: 'page', sizeParam: 'page_size', perPage: 50 };
 
-  // Owned repos
-  if (provider.owned) {
-    const data = await fetchAllPages(`${apiBase}/user/repos?role=Guest`, { headers }, pageOpts);
+  // Owned + member repos: /user/repos returns everything the user can read
+  // (both owned and group membership). role=Reporter is the minimum role that
+  // grants read access — Guest cannot read code. Scope is controlled via
+  // include/exclude.
+  {
+    const data = await fetchAllPages(`${apiBase}/user/repos?role=Reporter`, { headers }, pageOpts);
     for (const r of data) {
       if (r.path) {
         repos.set(r.path, r);
@@ -38,7 +41,9 @@ async function listRepos(provider) {
       const data = await fetchAllPages(`${apiBase}/user/stared-repos`, { headers }, pageOpts);
       for (const r of data) {
         if (r.path) {
-          repos.set(r.path, r);
+          const existing = repos.get(r.path);
+          // Mark as starred so the include whitelist doesn't filter it out.
+          repos.set(r.path, Object.assign(existing || {}, r, { _starred: true }));
         }
       }
     } catch {
@@ -46,34 +51,10 @@ async function listRepos(provider) {
     }
   }
 
-  // Member repos - fetch repos from each group
-  if (provider.member) {
-    try {
-      const groups = await fetchAllPages(`${apiBase}/user/groups?role=Guest`, { headers }, pageOpts);
-      for (const group of groups) {
-        if (!group.path) continue;
-        try {
-          const groupRepos = await fetchAllPages(
-            `${apiBase}/${group.path}/-/repos`,
-            { headers },
-            pageOpts
-          );
-          for (const r of groupRepos) {
-            if (r.path) {
-              repos.set(r.path, r);
-            }
-          }
-        } catch {
-          // skip groups we can't access
-        }
-      }
-    } catch {
-      // groups endpoint may not be available
-    }
-  }
-
-  // Filter excludes
+  // Filter excludes / includes
   const excludePatterns = provider.exclude;
+  const includePatterns = provider.include;
+  const hasInclude = Array.isArray(includePatterns) && includePatterns.length > 0;
 
   // Determine clone host from apiBase
   let cloneHost = DEFAULT_CLONE_HOST;
@@ -92,7 +73,14 @@ async function listRepos(provider) {
     const repo = parts.pop();
     const owner = parts.join('/');
 
+    // exclude takes priority: always drop excluded repos.
     if (isExcluded(fullPath, excludePatterns)) continue;
+
+    // include whitelist: when set, only repos matching it are kept —
+    // EXCEPT starred repos, which are always backed up regardless of include.
+    if (hasInclude && !repoData._starred) {
+      if (!includePatterns.some((p) => matchesPattern(fullPath, p))) continue;
+    }
 
     const url = `https://cnb:${token}@${cloneHost}/${fullPath}.git`;
     const lfs = shouldFetchLfs(provider.lfs, fullPath, owner);

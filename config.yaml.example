@@ -80,21 +80,17 @@ gitlab:
 # CNB.cool
 cnb:
   type: cnb
-  # (required) The GitLab access token.
+  # (required) The CNB access token.
   # Create one with the scopes:
   # "repo-code:r, repo-basic-info:r, account-engage:r"
   # https://docs.cnb.cool/en/guide/access-token.html
   access_token: 4FcGI13ca4AfX17se0iypVdNWsC
-  # (optional) Back up repos you own.
-  # (default: true)
-  owned: true
+  # Repos you own and repos of groups you belong
+  # to are always backed up; use include/exclude
+  # below to narrow the scope.
   # (optional) Back up repos you starred.
   # (default: true)
   starred: true
-  # (optional) Back up repos owned by 
-  # teams of which you are a member.
-  # (default: true)
-  member: true
   # (optional) Set this url to connect to
   # your self-hosted cnb install.
   # (default: https://cnb.cool/)
@@ -102,13 +98,21 @@ cnb:
   # (optional) Set whether enable lfs support
   lfs:
     - "*"
-    # - my-included-org
+    # - my-included-group
     # - my-included-user
     # - my-namespace/included-repository-name
-  # (optional) Exclude this list of repos
-  # or whole organizations/users
+  # (optional) Whitelist. When set, only repos
+  # matching this list are backed up (matched by
+  # path prefix). Starred repos are always backed
+  # up regardless of this list.
+  # include:
+  #   - my-included-group
+  #   - my-namespace/included-repository-name
+  # (optional) Exclude this list of repos or whole
+  # groups/users. Matched by path prefix. Takes
+  # priority over include.
   # exclude:
-  #   - my-excluded-org
+  #   - my-excluded-group
   #   - my-excluded-user
   #   - my-namespace/excluded-repository-name
 repo:

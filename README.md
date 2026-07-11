@@ -61,9 +61,10 @@ gitlab:
 cnb:
   type: cnb
   access_token: your_cnb_token  # Requires repo-code:r, repo-basic-info:r, account-engage:r scopes
-  owned: true          # Back up repos you own
   starred: true        # Back up repos you starred
-  member: true         # Back up repos from your teams
+  # Repos you own and repos of groups you belong to are always backed up.
+  # include: []        # Whitelist (path prefix). If set, only matching repos are backed up; starred repos are exempt.
+  # exclude: []        # Blacklist (path prefix). Takes priority over include.
 
 # Specify repository URLs directly
 repo:

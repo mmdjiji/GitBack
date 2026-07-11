@@ -61,9 +61,10 @@ gitlab:
 cnb:
   type: cnb
   access_token: your_cnb_token  # 需要 repo-code:r, repo-basic-info:r, account-engage:r 权限
-  owned: true          # 备份自己拥有的仓库
   starred: true        # 备份加星标的仓库
-  member: true         # 备份所属团队的仓库
+  # 自己拥有的仓库以及所属组织的仓库始终会被备份。
+  # include: []        # 白名单（按路径前缀匹配）。设置后仅备份匹配的仓库；加星标的仓库不受此限制。
+  # exclude: []        # 黑名单（按路径前缀匹配）。优先级高于 include。
 
 # 直接指定仓库地址
 repo:
